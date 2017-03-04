@@ -14,6 +14,9 @@ ENV DB_NAME dbname
 RUN mkdir /tmp/deploments
 ENV DEPLOY_DIR /tmp/deploments
 
+RUN mkdir /tmp/jboss-cli
+ENV CLI_DIR /tmp/jboss-cli
+
 COPY startWithPostgres.sh $WILDFLY_HOME/bin
 
 USER root

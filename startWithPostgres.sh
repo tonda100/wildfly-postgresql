@@ -30,6 +30,13 @@ data-source add --jndi-name=$DATASOURCE_JNDI --name=$DATASOURCE_NAME --connectio
 run-batch
 EOF
 
+FILES=$CLI_DIR/*.cli
+for f in $FILES
+do
+  echo "Processing $f file..."
+  $JBOSS_CLI -c --file=$f
+done
+
 echo "=> DEPLOY WARs"
 cp ${DEPLOY_DIR}/* ${WILDFLY_HOME}/standalone/deployments/
 
