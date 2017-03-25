@@ -1,5 +1,6 @@
 #!/bin/bash
 
+if [ ! -f wildfly.started ]; then
 JBOSS_CLI=$WILDFLY_HOME/bin/jboss-cli.sh
 
 function wait_for_server() {
@@ -37,7 +38,14 @@ do
   $JBOSS_CLI -c --file=$f
 done
 
+echo "=> Shutdown Wildfly"
+$JBOSS_CLI -c ":shutdown"
+
 echo "=> DEPLOY WARs"
 cp ${DEPLOY_DIR}/* ${WILDFLY_HOME}/standalone/deployments/
 
-tail -f ${WILDFLY_HOME}/standalone/log/server.log
+touch wildfly.started
+fi
+
+echo "=> Start Wildfly"
+$WILDFLY_HOME/bin/standalone.sh -b=0.0.0.0 -c standalone.xml
