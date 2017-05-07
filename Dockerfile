@@ -1,4 +1,4 @@
-FROM tonda100/wildfly-empty:20170218
+FROM tonda100/wildfly-empty
 MAINTAINER Antonin Stoklasek
 
 ENV DATASOURCE_NAME ApplicationDS
