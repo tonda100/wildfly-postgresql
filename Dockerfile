@@ -1,5 +1,14 @@
-FROM tonda100/wildfly-empty
+FROM jboss/wildfly:18.0.0.Final
 MAINTAINER Antonin Stoklasek
+
+ENV WILDFLY_HOME /opt/jboss/wildfly
+ENV DEPLOY_DIR ${WILDFLY_HOME}/standalone/deployments/
+
+# setup timezone
+ENV TZ=Europe/Prague
+USER root
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+USER jboss
 
 ENV DATASOURCE_NAME ApplicationDS
 ENV DATASOURCE_JNDI java:/ApplicationDS
@@ -22,9 +31,8 @@ COPY startWithPostgres.sh $WILDFLY_HOME/bin
 USER root
 RUN chown jboss:jboss $WILDFLY_HOME/bin/startWithPostgres.sh
 RUN chmod 755 $WILDFLY_HOME/bin/startWithPostgres.sh
-RUN yum -y install wget
 USER jboss
 
-RUN wget -P /tmp https://jdbc.postgresql.org/download/postgresql-9.4.1212.jar
+COPY postgresql-42.2.8.jar /tmp
 
 ENTRYPOINT $WILDFLY_HOME/bin/startWithPostgres.sh
